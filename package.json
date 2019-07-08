@@ -1,0 +1,15 @@
+{
+  "name": "contact-keeper",
+  "version": "1.0.0",
+  "description": "Full stack MERN contact manager with React hooks, context & JWT authentication. This is second of projects of [React Front To Back 2019](https://www.udemy.com/modern-react-front-to-back/) course.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kektour/contact-keeper.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
