@@ -13,7 +13,7 @@ const Contact = require('../models/Contact');
 // @access    Private
 router.get('/', auth, async (req, res) => {
   try {
-    const contacts = await Contact.find({ user: req.user._id }).sort({
+    const contacts = await Contact.find({ user: req.user.id }).sort({
       date: -1
     });
     return res.json(contacts);
@@ -26,9 +26,38 @@ router.get('/', auth, async (req, res) => {
 // @route     POST /api/contacts
 // @desc      Add new contact
 // @access    Private
-router.post('/', async (req, res) => {
-  res.send('Add new contact');
-});
+router.post(
+  '/',
+  [
+    auth,
+    [
+      check('name', 'Name is required')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { name, email, phone, type } = req.body;
+    try {
+      const newContact = new Contact({
+        name,
+        email,
+        phone,
+        type,
+        user: req.user.id
+      });
+      const contact = await newContact.save();
+      res.json(contact);
+    } catch (err) {
+      console.log(err.message);
+      return res.status(500).send('Server error');
+    }
+  }
+);
 
 // @route     PUT /api/contacts/:id
 // @desc      Update contact
