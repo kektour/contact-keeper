@@ -8,7 +8,8 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  LOGOUT
 } from '../types';
 import axios from 'axios';
 import setAuthToken from '../../utils/setAuthToken';
@@ -72,7 +73,7 @@ function AuthState(props) {
 
   // Logout User
   const logout = () => {
-    console.log('logout');
+    dispatch({ type: LOGOUT });
   };
 
   // Clear Error
