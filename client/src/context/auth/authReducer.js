@@ -11,14 +11,15 @@ import {
 export default function(state, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      localStorage.setItem('token', action.payload);
+      localStorage.setItem('token', action.payload.token);
       return {
         ...state,
-        token: action.payload,
+        token: action.payload.token,
         isAuthenticated: true,
         loading: false
       };
     case REGISTER_FAIL:
+    case AUTH_ERROR:
       localStorage.removeItem('token');
       return {
         ...state,
@@ -32,6 +33,13 @@ export default function(state, action) {
       return {
         ...state,
         error: null
+      };
+    case USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: action.payload
       };
     default:
       return state;
