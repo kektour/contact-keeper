@@ -1,6 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import AlertContext from '../../context/alert/alertContext';
+import AuthContext from '../../context/auth/authContext';
 
-function Login() {
+function Login(props) {
+  const alertContext = useContext(AlertContext);
+  const authContext = useContext(AuthContext);
+
+  const { setAlert } = alertContext;
+  const { login, error, clearError, isAuthenticated } = authContext;
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      props.history.push('/');
+    }
+
+    if (error === 'Invalid Credentials') {
+      setAlert(error, 'danger');
+      clearError();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, isAuthenticated]);
+
   const [user, setUser] = useState({
     email: '',
     password: ''
@@ -13,7 +33,11 @@ function Login() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(user);
+    if (email === '' || password === '') {
+      setAlert('Please fill in all fields', 'danger');
+    } else {
+      login({ email, password });
+    }
   };
 
   return (
@@ -29,6 +53,7 @@ function Login() {
             name='email'
             value={email}
             onChange={handleChange}
+            required
           />
         </div>
         <div className='form-group'>
@@ -38,6 +63,7 @@ function Login() {
             name='password'
             value={password}
             onChange={handleChange}
+            required
           />
         </div>
         <input
