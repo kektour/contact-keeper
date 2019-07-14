@@ -70,7 +70,13 @@ router.put('/:id', async (req, res) => {
 // @desc      Delete contact
 // @access    Private
 router.delete('/:id', async (req, res) => {
-  res.send('Delete contact');
+  try {
+    await Contact.deleteOne({ _id: req.params.id });
+    return res.send('Delete contact');
+  } catch (err) {
+    console.log(err.message);
+    return res.status(500).send('Server error');
+  }
 });
 
 module.exports = router;
